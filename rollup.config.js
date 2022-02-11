@@ -1,26 +1,27 @@
-import typescript from '@rollup/plugin-typescript'
-import node from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
+import esbuild from "rollup-plugin-esbuild";
+// import typescript from "@rollup/plugin-typescript";
+import node from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
 
 // You can have more root bundles by extending this array
-const rootFiles = ['index.ts']
+const rootFiles = ["index.ts"];
 
-export default rootFiles.map(name => {
+export default rootFiles.map((name) => {
   /** @type { import("rollup").RollupOptions } */
   const options = {
     input: `src/${name}`,
-    external: ['typescript'],
+    external: ["typescript"],
     output: {
       name,
-      dir: 'dist',
-      format: 'amd',
+      dir: "dist",
+      format: "amd",
     },
-    plugins: [typescript({ tsconfig: 'tsconfig.json' }), commonjs(), node(), json()],
+    plugins: [esbuild({ tsconfig: 'tsconfig.json' }), commonjs(), node(), json()],
   }
 
-  return options
-})
+  return options;
+});
 
 /** Note:
  * if you end up wanting to import a dependency which relies on typescript, you will need
