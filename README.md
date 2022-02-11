@@ -1,6 +1,6 @@
 ## TypeScript Playground Plugin
 
-My new plugin for the TypeScript playground.
+TypeScript Playground plugin to save on format
 
 ## Running this plugin
 
