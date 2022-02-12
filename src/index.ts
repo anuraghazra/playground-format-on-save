@@ -47,7 +47,7 @@ const makePlugin = (utils: PluginUtils) => {
     displayName: "Format On Save",
     didMount: (sandbox, container) => {
       const ds = utils.createDesignSystem(container);
-      let shouldFormatOnSave = get(lskey) || false;
+      let shouldFormatOnSave = get(lskey) || true;
       let prettierConfig = get(configkey) || {};
 
       // Bootstrap UI
