@@ -3,6 +3,7 @@ import type { PlaygroundPlugin, PluginUtils } from "./vendor/playground";
 import prettier from "prettier/standalone";
 import tsPlugin from "prettier/parser-typescript";
 
+const sKeyCode = 49;
 const lskey = "tsplay-plugin-format-on-save";
 const configkey = "tsplay-plugin-prettier-config";
 
@@ -66,8 +67,9 @@ const makePlugin = (utils: PluginUtils) => {
 
       const handleSave = (e: KeyboardEvent) => {
         if (!shouldFormatOnSave) return;
-        const isSKey = e.key == "s";
+        const isSKey = e.keyCode === sKeyCode;
         const isSavePressed = (isSKey && e.metaKey) || (isSKey && e.ctrlKey);
+
         if (!isSavePressed) return;
         e.preventDefault();
         try {
@@ -102,7 +104,7 @@ const makePlugin = (utils: PluginUtils) => {
           ds.p(`[Prettier] failed to format: ${e.message}`);
         }
       };
-      window.addEventListener("keydown", handleSave);
+      sandbox.editor.onKeyDown((e) => handleSave(e as any));
     },
 
     modelChangedDebounce: async (_sandbox, _model) => {},
