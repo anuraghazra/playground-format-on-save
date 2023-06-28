@@ -1,6 +1,6 @@
 {
   "name": "playground-format-on-save",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "dist/index.js",
   "description": "TypeScript Playground plugin to save on format",
   "license": "MIT",
@@ -36,9 +36,9 @@
     "typescript": "latest"
   },
   "dependencies": {
-    "@types/prettier": "^2.4.4",
+    "@types/prettier": "^2.7.3",
     "chokidar": "^3.5.3",
-    "prettier": "^2.5.1",
+    "prettier": "^2.8.8",
     "tslib": "^1.10.0"
   }
 }

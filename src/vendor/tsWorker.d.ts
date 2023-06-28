@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import ts from "typescript";
 export declare class TypeScriptWorker implements ts.LanguageServiceHost {
     private _ctx;
     private _extraLibs;
@@ -29,12 +29,14 @@ export declare class TypeScriptWorker implements ts.LanguageServiceHost {
     getNavigationBarItems(fileName: string): Promise<ts.NavigationBarItem[]>;
     getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): Promise<ts.TextChange[]>;
     getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): Promise<ts.TextChange[]>;
-    getFormattingEditsAfterKeystroke(fileName: string, postion: number, ch: string, options: ts.FormatCodeOptions): Promise<ts.TextChange[]>;
-    findRenameLocations(fileName: string, positon: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): Promise<readonly ts.RenameLocation[] | undefined>;
-    getRenameInfo(fileName: string, positon: number, options: ts.RenameInfoOptions): Promise<ts.RenameInfo>;
+    getFormattingEditsAfterKeystroke(fileName: string, position: number, ch: string, options: ts.FormatCodeOptions): Promise<ts.TextChange[]>;
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): Promise<readonly ts.RenameLocation[] | undefined>;
+    getRenameInfo(fileName: string, position: number, options: ts.RenameInfoOptions): Promise<ts.RenameInfo>;
     getEmitOutput(fileName: string): Promise<ts.EmitOutput>;
     getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: ts.FormatCodeOptions): Promise<ReadonlyArray<ts.CodeFixAction>>;
     updateExtraLibs(extraLibs: IExtraLibs): void;
+    readFile(path: string, encoding?: string | undefined): string | undefined;
+    fileExists(path: string): boolean;
 }
 export interface IExtraLib {
     content: string;

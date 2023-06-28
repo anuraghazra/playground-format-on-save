@@ -1,9 +1,9 @@
-declare type Sandbox = import("./sandbox").Sandbox;
-declare type Monaco = typeof import("monaco-editor");
+type Sandbox = import("./sandbox").Sandbox;
+type Monaco = typeof import("monaco-editor");
 import { PluginUtils } from "./pluginUtils";
 import type React from "react";
 export { PluginUtils } from "./pluginUtils";
-export declare type PluginFactory = {
+export type PluginFactory = {
     (i: (key: string, components?: any) => string, utils: PluginUtils): PlaygroundPlugin;
 };
 /** The interface of all sidebar plugins */
@@ -98,4 +98,4 @@ export declare const setupPlayground: (sandbox: Sandbox, monaco: Monaco, config:
         setNotifications: (pluginID: string, amount: number) => void;
     };
 };
-export declare type Playground = ReturnType<typeof setupPlayground>;
+export type Playground = ReturnType<typeof setupPlayground>;
