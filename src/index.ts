@@ -23,25 +23,6 @@ const get = (key: string) => {
   }
 };
 
-const flashInfo = (message: string, timeout = 1000) => {
-  let flashBG = document.getElementById("flash-bg");
-  if (flashBG) {
-    flashBG.parentElement?.removeChild(flashBG);
-  }
-
-  flashBG = document.createElement("div");
-  flashBG.id = "flash-bg";
-
-  const p = document.createElement("p");
-  p.textContent = message;
-  flashBG.appendChild(p);
-  document.body.appendChild(flashBG);
-
-  setTimeout(() => {
-    flashBG?.parentElement?.removeChild(flashBG);
-  }, timeout);
-};
-
 const makeUI = (container: HTMLDivElement) => {
   const textbox_label = document.createElement("p");
   const textbox = document.createElement("textarea");

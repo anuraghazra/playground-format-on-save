@@ -1,6 +1,6 @@
 {
   "name": "playground-format-on-save",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/index.js",
   "description": "TypeScript Playground plugin to save on format",
   "license": "MIT",
