@@ -49,4 +49,4 @@ export declare const createUtils: (sb: any, react: typeof React) => {
     /** Add a little red button in the top corner of a plugin tab with a number */
     setNotifications: (pluginID: string, amount: number) => void;
 };
-export declare type PluginUtils = ReturnType<typeof createUtils>;
+export type PluginUtils = ReturnType<typeof createUtils>;
