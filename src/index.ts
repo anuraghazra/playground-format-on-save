@@ -2,8 +2,10 @@ import type { PlaygroundPlugin, PluginUtils } from "./vendor/playground";
 
 import prettier from "prettier/standalone";
 import tsPlugin from "prettier/parser-typescript";
+import { IKeyboardEvent } from "monaco-editor";
 
-const sKeyCode = 49;
+// @ts-ignore - wrong type coming from monaco
+const SKeyCode = sandbox.monaco.KeyCode.KeyS;
 const lskey = "tsplay-plugin-format-on-save-v2";
 const configkey = "tsplay-plugin-prettier-config";
 
@@ -86,9 +88,9 @@ const makePlugin = (utils: PluginUtils) => {
         store(configkey, prettierConfig);
       };
 
-      const handleSave = (e: KeyboardEvent) => {
+      const handleSave = (e: IKeyboardEvent) => {
         if (!pluginConfig.shouldFormatOnSave) return;
-        const isSKey = e.keyCode === sKeyCode;
+        const isSKey = e.keyCode === SKeyCode;
         const isSavePressed = (isSKey && e.metaKey) || (isSKey && e.ctrlKey);
 
         if (!isSavePressed) return;
@@ -127,22 +129,21 @@ const makePlugin = (utils: PluginUtils) => {
       };
 
       // Format on save
-      sandbox.editor.onKeyDown((e) => handleSave(e as any));
+      sandbox.editor.onKeyDown((e) => handleSave(e));
 
       // Override the copy command to save the URL to the clipboard
       const originalCopyAction = sandbox.editor.getAction("copy-clipboard");
       sandbox.editor.addAction({
         id: "copy-clipboard",
         label: "Save to clipboard",
-        keybindings: [
-          // @ts-ignore
-          sandbox.monaco.KeyMod.CtrlCmd | sandbox.monaco.KeyCode.KeyS,
-        ],
+        keybindings: [sandbox.monaco.KeyMod.CtrlCmd | SKeyCode],
         contextMenuGroupId: "run",
         contextMenuOrder: 1.5,
         run: () => {
           if (pluginConfig.preventCopyLinkOnSave) {
-            // do nothing
+            // do not copy the code to clipboard but still update the URL
+            const newURL = sandbox.createURLQueryWithCompilerOptions(sandbox);
+            window.history.replaceState({}, "", newURL);
           } else {
             originalCopyAction.run();
           }
