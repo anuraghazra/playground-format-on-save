@@ -1,4 +1,8 @@
-import type { PlaygroundPlugin, PluginUtils } from "./vendor/playground";
+import {
+  type PlaygroundPlugin,
+  type PluginFactory,
+  type PluginUtils,
+} from "./vendor/playground";
 
 import prettier from "prettier/standalone";
 import tsPlugin from "prettier/parser-typescript";
@@ -58,7 +62,88 @@ const makeUI = (container: HTMLDivElement) => {
   return { formatOnSaveToggleInput, copyLinkOnSaveInput, textbox };
 };
 
+const modifiedDTSPlugin: PluginFactory = (i, utils) => {
+  let codeElement: HTMLElement;
+  let shouldPrettyDTS = false;
+  const plugin: PlaygroundPlugin = {
+    id: "dts",
+    displayName: ".D.TS",
+    willMount: (sandbox, container) => {
+      const { code } = utils.createDesignSystem(container);
+      const prettyDTS = () => {
+        sandbox.getDTSForCode().then((dts) => {
+          const prettySource = shouldPrettyDTS
+            ? prettier.format(dts, {
+                parser: "typescript",
+                plugins: [tsPlugin],
+              })
+            : dts;
+          sandbox.monaco.editor
+            .colorize(prettySource, "typescript", {})
+            .then((coloredDTS) => {
+              codeElement.innerHTML = coloredDTS;
+            });
+        });
+      };
+      prettyDTS();
+
+      const prettyDtsText = document.createElement("span");
+      const prettyDtsLabel = document.createElement("label");
+      const prettyDtsToggleInput = document.createElement("input");
+
+      prettyDtsText.textContent = " Prettify DTS?";
+      prettyDtsToggleInput.type = "checkbox";
+      prettyDtsLabel.appendChild(prettyDtsToggleInput);
+      prettyDtsLabel.appendChild(prettyDtsText);
+
+      prettyDtsToggleInput.onchange = () => {
+        shouldPrettyDTS = prettyDtsToggleInput.checked;
+        prettyDTS();
+      };
+      container.appendChild(prettyDtsLabel);
+      container.appendChild(document.createElement("br"));
+      container.appendChild(document.createElement("br"));
+
+      codeElement = code("");
+    },
+    modelChanged: (sandbox, model) => {
+      sandbox.getDTSForCode().then((dts) => {
+        const prettySource = shouldPrettyDTS
+          ? prettier.format(dts, {
+              parser: "typescript",
+              plugins: [tsPlugin],
+            })
+          : dts;
+        sandbox.monaco.editor
+          .colorize(prettySource, "typescript", {})
+          .then((coloredDTS) => {
+            codeElement.innerHTML = coloredDTS;
+          });
+      });
+    },
+  };
+
+  return plugin;
+};
+
 const makePlugin = (utils: PluginUtils) => {
+  // Find and remove showDTSPlugin in order to override it with our own
+  const plugins = window.playground.plugins;
+  // find showDTSPlugin
+  const showDTSPluginIndex = plugins.findIndex((p) => p.id === "dts");
+  plugins.splice(showDTSPluginIndex, 1);
+
+  // remove showDTSPlugin tab
+  const tabs = window.playground.tabs;
+  const showDTSPluginTabIndex = tabs.findIndex(
+    (t) => t.getAttribute("id") === "playground-plugin-tab-dts"
+  );
+  tabs[showDTSPluginTabIndex].remove();
+  tabs.splice(showDTSPluginTabIndex, 1);
+
+  // register our plugin
+  window.playground.registerPlugin(modifiedDTSPlugin((i) => i, utils));
+
   const customPlugin: PlaygroundPlugin = {
     id: "format-on-save",
     displayName: "Format On Save",
