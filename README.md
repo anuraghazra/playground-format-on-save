@@ -2,6 +2,13 @@
 
 TypeScript Playground plugin to save on format
 
+## Features
+
+- Format code with prettier with <kbd>CTRL+S</kbd>
+- Customizable prettier config
+- Prevents playground link to be copied into clipboard
+- Support for prettifying dts output (check the .D.TS panel)
+
 ## Running this plugin
 
 - [Click this link](https://www.typescriptlang.org/play?install-plugin=playground-format-on-save) to install
