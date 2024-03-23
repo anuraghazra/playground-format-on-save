@@ -3,10 +3,11 @@ import {
   type PluginFactory,
   type PluginUtils,
 } from "./vendor/playground";
+import { IKeyboardEvent } from "monaco-editor";
 
 import prettier from "prettier/standalone";
-import tsPlugin from "prettier/parser-typescript";
-import { IKeyboardEvent } from "monaco-editor";
+import * as prettierPluginTS from "prettier/plugins/typescript";
+import * as prettierPluginEstree from "prettier/plugins/estree";
 
 // @ts-ignore - wrong type coming from monaco
 const SKeyCode = sandbox.monaco.KeyCode.KeyS;
@@ -71,11 +72,11 @@ const modifiedDTSPlugin: PluginFactory = (i, utils) => {
     willMount: (sandbox, container) => {
       const { code } = utils.createDesignSystem(container);
       const prettyDTS = () => {
-        sandbox.getDTSForCode().then((dts) => {
+        sandbox.getDTSForCode().then(async (dts) => {
           const prettySource = shouldPrettyDTS
-            ? prettier.format(dts, {
+            ? await prettier.format(dts, {
                 parser: "typescript",
-                plugins: [tsPlugin],
+                plugins: [prettierPluginTS, prettierPluginEstree],
               })
             : dts;
           sandbox.monaco.editor
@@ -107,11 +108,11 @@ const modifiedDTSPlugin: PluginFactory = (i, utils) => {
       codeElement = code("");
     },
     modelChanged: (sandbox, model) => {
-      sandbox.getDTSForCode().then((dts) => {
+      sandbox.getDTSForCode().then(async (dts) => {
         const prettySource = shouldPrettyDTS
-          ? prettier.format(dts, {
+          ? await prettier.format(dts, {
               parser: "typescript",
-              plugins: [tsPlugin],
+              plugins: [prettierPluginTS, prettierPluginEstree],
             })
           : dts;
         sandbox.monaco.editor
@@ -173,7 +174,7 @@ const makePlugin = (utils: PluginUtils) => {
         store(configkey, prettierConfig);
       };
 
-      const handleSave = (e: IKeyboardEvent) => {
+      const handleSave = async (e: IKeyboardEvent) => {
         if (!pluginConfig.shouldFormatOnSave) return;
         const isSKey = e.keyCode === SKeyCode;
         const isSavePressed = (isSKey && e.metaKey) || (isSKey && e.ctrlKey);
@@ -183,10 +184,10 @@ const makePlugin = (utils: PluginUtils) => {
         try {
           const source = sandbox.getText();
           const cursorPosOld = sandbox.editor.getPosition();
-          const prettySource = prettier.formatWithCursor(source, {
+          const prettySource = await prettier.formatWithCursor(source, {
             cursorOffset: cursorPosOld.column * cursorPosOld.lineNumber,
             parser: "typescript",
-            plugins: [tsPlugin],
+            plugins: [prettierPluginTS, prettierPluginEstree],
             ...prettierConfig,
           });
 

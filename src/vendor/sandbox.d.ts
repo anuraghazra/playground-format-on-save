@@ -94,9 +94,28 @@ export declare const createTypeScriptSandbox: (partialConfig: Partial<SandboxCon
             groupEnd: (...args: any[]) => void;
         };
         domID: string;
+    } | {
+        text: string;
+        useJavaScript?: boolean | undefined;
+        filetype: "js" | "ts" | "d.ts";
+        compilerOptions: CompilerOptions;
+        monacoSettings?: import("monaco-editor").editor.IEditorOptions | undefined;
+        acquireTypes: boolean;
+        supportTwoslashCompilerOptions: boolean;
+        suppressAutomaticallyGettingDefaultText?: true | undefined;
+        suppressAutomaticallyGettingCompilerFlags?: true | undefined;
+        customTypeScriptWorkerPath?: string | undefined;
+        logger: {
+            log: (...args: any[]) => void;
+            error: (...args: any[]) => void;
+            groupCollapsed: (...args: any[]) => void;
+            groupEnd: (...args: any[]) => void;
+        };
+        elementToAppend?: HTMLElement | undefined;
+        domID: string;
     };
     /** A list of TypeScript versions you can use with the TypeScript sandbox */
-    supportedVersions: readonly ["5.1.3", "5.0.4", "4.9.5", "4.8.4", "4.7.4", "4.6.4", "4.5.5", "4.4.4", "4.3.5", "4.2.3", "4.1.5", "4.0.5", "3.9.7", "3.8.3", "3.7.5", "3.6.3", "3.5.1", "3.3.3", "3.1.6", "3.0.1", "2.8.1", "2.7.2", "2.4.1"];
+    supportedVersions: readonly ["5.4.3", "5.3.3", "5.2.2", "5.1.6", "5.0.4", "4.9.5", "4.8.4", "4.7.4", "4.6.4", "4.5.5", "4.4.4", "4.3.5", "4.2.3", "4.1.5", "4.0.5", "3.9.7", "3.8.3", "3.7.5", "3.6.3", "3.5.1", "3.3.3", "3.1.6", "3.0.1", "2.8.1", "2.7.2", "2.4.1"];
     /** The monaco editor instance */
     editor: import("monaco-editor").editor.IStandaloneCodeEditor;
     /** Either "typescript" or "javascript" depending on your config */

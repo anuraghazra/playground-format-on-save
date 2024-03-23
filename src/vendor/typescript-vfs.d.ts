@@ -25,7 +25,8 @@ export interface VirtualTypeScriptEnvironment {
 export declare function createVirtualTypeScriptEnvironment(sys: System, rootFiles: string[], ts: TS, compilerOptions?: CompilerOptions, customTransformers?: CustomTransformers): VirtualTypeScriptEnvironment;
 /**
  * Grab the list of lib files for a particular target, will return a bit more than necessary (by including
- * the dom) but that's OK
+ * the dom) but that's OK, we're really working with the constraint that you can't get a list of files
+ * when running in a browser.
  *
  * @param target The compiler settings target baseline
  * @param ts A copy of the TypeScript module
@@ -34,8 +35,11 @@ export declare const knownLibFilesForCompilerOptions: (compilerOptions: Compiler
 /**
  * Sets up a Map with lib contents by grabbing the necessary files from
  * the local copy of typescript via the file system.
+ *
+ * The first two args are un-used, but kept around so as to not cause a
+ * semver major bump for no gain to module users.
  */
-export declare const createDefaultMapFromNodeModules: (compilerOptions: CompilerOptions, ts?: typeof import("typescript"), tsLibDirectory?: string) => Map<string, string>;
+export declare const createDefaultMapFromNodeModules: (_compilerOptions: CompilerOptions, _ts?: typeof import("typescript"), tsLibDirectory?: string) => Map<string, string>;
 /**
  * Adds recursively files from the FS into the map based on the folder
  */
